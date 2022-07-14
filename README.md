@@ -1,7 +1,7 @@
 # apollo-graphql-playbook
 Notes and guides on using apollo client's APIs
 
-[GraphQL](https://graphql.org/) allows us to build APIs based on domain modal once and consume it in different interfaces within one or more platforms without having to write (for the most part) feature specific APIs that involve the same domain modal again and again. Eg. Write plans API once and it can be used in different pages with different entity nesting and across platforms with the different nesting if we want to stretch our experience to native mobile experience.
+[GraphQL](https://graphql.org/) allows us to build APIs based on domain modal once and consume it in different interfaces within one or more platforms without having to write (for the most part) feature specific APIs that involve the same domain modal again and again. Eg. in an address book, Write address API once and it can be used in different pages with different entity nesting and across platforms with the different nesting if we want to stretch our experience to native mobile experience.
 
 Apollo is an open source tool that allows writing both GraphQL APIs using [apollo server](https://www.apollographql.com/docs/apollo-server/) and GraphQL clients using [apollo client](https://www.apollographql.com/docs/react/). They don't necessary have to coexist in applications and one can function independent of the other. This guide currently only focuses on apollo client.
 
@@ -40,7 +40,7 @@ Mutation responses can be handled in a quite a handful of ways —
 
 Once the mutation succeeds, we could request apollo to send a refetch request to queries that need to be updated. Eg. in an address book, when we create a new address entry, we could request apollo to refetch relevant and related queries that might also have new data as a result of the create mutation, like a separate query to show a list of unique postcodes in the address book.
 
-- This is not practical since it creates a poorer experience for users and feedback will be show after two round trips - one is mutation and the other is the refetch query.
+- This is not practical since it creates a poorer experience for users since the feedback will be shown only after two round trips - one is mutation and the other is the refetch query.
 
 - We however sometimes will have no other option but to refetch and it's okay as a last resort
 
@@ -65,7 +65,7 @@ Eg. In a social network, when the user creates a comment, we request the id, com
 
 - This approach is usually not practical for top level entities that has deep nested entities. Eg. Social network application has categorised topics, each topic will have posts, each post will have comments, etc. Now while creating a topic, it's not practical to fetch the entire nested entities in create mutation response.
 
-**Partial payload:** This is the most practical approach and suits for most cases. Apollo is smart enough to refetch when there are entities with missing fields in cache for an active query. Eg. in an address book, if an address query needs 5 fields and if we insert a new address into cache with only 1 field, apollo identifies these missing fields and sends a refetch request for the address query to get latest data. We could make use of this mechanism for most create experiences. We only need to request id (or a few more relevant fields) in create mutations and insert that into where ever it needs to be inserted. We then let apollo take care of fetching whichever query is active and if that query is missing a required field. This way we will be able to build cache and mutation solutions irrespective of feature specific requirements and reuse these solutions across the app in different interfaces.
+**Partial payload:** This is the most practical approach and suits for most cases. Apollo is smart enough to refetch when there are entities with missing fields in cache for an active query. Eg. in an address book, if an address query needs 5 fields and if we insert a new address into cache with only 1 field, apollo identifies these missing fields and sends a refetch request for the address query to get latest data. We could make use of this mechanism for most create experiences. We only need to request id (or a few more relevant fields) in create mutations and insert that into where ever it needs to be inserted. We then let apollo take care of fetching whichever query is active and if that query is missing a required field. This way we will be able to build cache and mutation solutions independent of feature specific requirements and reuse these solutions across the app in different interfaces.
 
 - Very practical. Always resort to this approach or at least try to.
 
